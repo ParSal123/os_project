@@ -7,12 +7,16 @@
 #include <linux/fs.h>
 #include <linux/kernel.h>
 
-static int __init fib_init(void);
-static void __exit fib_exit(void);
+const char* DEVICE_NAME = "fibdriver";
+static int device_file_major_number = 0;
+static int fib_init(void);
+static void fib_exit(void);
+static long fib_ioctl(struct file *file, unsigned int ioctl_num, unsigned long ioctl_param);
 
-struct file_operations simple_driver_fops = 
+static struct file_operations fib_fops = 
 {
     .owner = THIS_MODULE,
+    .unlocked_ioctl = fib_ioctl
 };
 
 module_init(fib_init);
