@@ -30,5 +30,31 @@ void fib_exit(void)
 
 long fib_ioctl(struct file *file, unsigned int ioctl_num, unsigned long ioctl_param)
 {
+	struct FibRequest* request;
+	int i;
+
+	request = ioctl_param;
+
+	printk(KERN_NOTICE "Recieved %d", request->num);
+
+	printk(KERN_NOTICE "Calculating %d", 0);
+	request->mem[0] = 1;
+	if (request->num > 1)
+	{
+		printk(KERN_NOTICE "Calculating %d", 1);
+		request->mem[1] = 1;
+	}
+
+	for (i = 2; i < request->num; ++i)
+	{
+		printk(KERN_NOTICE "Calculating %d", i);
+		request->mem[i] = request->mem[i - 1] + request->mem[i - 2];
+	}
+
+	for (i = 0; i < request->num; ++i)
+	{
+		printk(KERN_NOTICE "Calculated %d", request->mem[i]);
+	}
+
 	return 0;
 }

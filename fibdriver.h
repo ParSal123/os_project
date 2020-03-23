@@ -6,6 +6,9 @@
 #include <linux/uaccess.h>
 #include <linux/fs.h>
 #include <linux/kernel.h>
+#include <linux/slab.h>
+
+#include "FibRequest.h"
 
 const char* DEVICE_NAME = "fibdriver";
 static int device_file_major_number = 0;
