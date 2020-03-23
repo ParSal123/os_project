@@ -21,6 +21,7 @@ int main()
         return file;
     }
 
+    printf("Please Enter Your Number.\n");
     scanf("%d", &number);
     struct FibRequest req;
     req.mem = malloc(4 * number);
