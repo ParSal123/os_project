@@ -51,10 +51,5 @@ long fib_ioctl(struct file *file, unsigned int ioctl_num, unsigned long ioctl_pa
 		request->mem[i] = request->mem[i - 1] + request->mem[i - 2];
 	}
 
-	for (i = 0; i < request->num; ++i)
-	{
-		printk(KERN_NOTICE "Calculated %d", request->mem[i]);
-	}
-
 	return 0;
 }
