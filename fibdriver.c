@@ -21,11 +21,8 @@ int fib_init(void)
    
 void fib_exit(void)
 {
-    if (device_file_major_number != 0)
-    {
-		printk(KERN_NOTICE "Fib Driver device file has been unregistered.");
-        unregister_chrdev(device_file_major_number, DEVICE_NAME);
-    }
+	unregister_chrdev(device_file_major_number, DEVICE_NAME);
+	printk(KERN_NOTICE "Fib Driver device file has been unregistered.");
 }
 
 long fib_ioctl(struct file *file, unsigned int ioctl_num, unsigned long ioctl_param)
