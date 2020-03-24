@@ -4,6 +4,7 @@ all:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+	rm -f ./fibtest
 load:
 	-@sudo rmmod fibdriver 2>/dev/null || true
 	-@sudo rm -f $(device_file) 2>/dev/null || true
