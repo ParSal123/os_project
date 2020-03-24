@@ -29,11 +29,12 @@ long fib_ioctl(struct file *file, unsigned int ioctl_num, unsigned long ioctl_pa
 {
 	struct FibRequest* request;
 	int i;
-
-	request = ioctl_param;
+	int* temp_mem;
+	
+	request = (struct FibRequest*)ioctl_param;
 
 	printk(KERN_NOTICE "Recieved %d", request->num);
-	int* temp_mem = kmalloc(request->num * sizeof(int), GFP_KERNEL);
+	temp_mem = kmalloc(request->num * sizeof(int), GFP_KERNEL);
 
 	printk(KERN_NOTICE "Calculating %d", 0);
 	temp_mem[0] = 1;

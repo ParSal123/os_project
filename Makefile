@@ -13,5 +13,5 @@ unload:
 	-sudo rmmod fibdriver
 	-sudo rm -f $(device_file)
 fib:
-	gcc fib.c -o fib
-	./fib
+	gcc fib.c -o fibtest
+	./fibtest

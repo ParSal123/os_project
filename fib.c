@@ -27,12 +27,6 @@ int main()
     req.mem = malloc(sizeof(int) * number);
     req.num = number;
     long result = ioctl(file, 0, &req);
-    
-    if (result < 0)
-    {
-        printf("Could not connect to driver!\n");
-        return result;
-    }
 
     printf("The first %d terms of the Fibonacci series are:\n", number);
     for (i = 0; i < number; ++i)
