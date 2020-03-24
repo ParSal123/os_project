@@ -36,20 +36,23 @@ long fib_ioctl(struct file *file, unsigned int ioctl_num, unsigned long ioctl_pa
 	request = ioctl_param;
 
 	printk(KERN_NOTICE "Recieved %d", request->num);
+	int* temp_mem = kmalloc(request->num * sizeof(int), GFP_KERNEL);
 
 	printk(KERN_NOTICE "Calculating %d", 0);
-	request->mem[0] = 1;
+	temp_mem[0] = 1;
 	if (request->num > 1)
 	{
 		printk(KERN_NOTICE "Calculating %d", 1);
-		request->mem[1] = 1;
+		temp_mem[1] = 1;
 	}
 
 	for (i = 2; i < request->num; ++i)
 	{
 		printk(KERN_NOTICE "Calculating %d", i);
-		request->mem[i] = request->mem[i - 1] + request->mem[i - 2];
+		temp_mem[i] = temp_mem[i - 1] + temp_mem[i - 2];
 	}
 
+	copy_to_user(request->mem, temp_mem, request->num * sizeof(int));
+	kfree(temp_mem);
 	return 0;
 }

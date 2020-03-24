@@ -24,7 +24,7 @@ int main()
     printf("Please Enter Your Number.\n");
     scanf("%d", &number);
     struct FibRequest req;
-    req.mem = malloc(4 * number);
+    req.mem = malloc(sizeof(int) * number);
     req.num = number;
     long result = ioctl(file, 0, &req);
     
