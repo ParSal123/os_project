@@ -29,11 +29,14 @@ int main()
     
     req.pid = number;
     req.response = malloc(sizeof(struct PidResponse));
-    
+    int is_thread = 1;
     while (1)
     {
         long result = ioctl(file, 0, &req);
         printf("Process Name: %s\n", req.response->comm);
+        if (is_thread)
+            printf("Parent Process: %d\n", req.response->parent_process);
+
         printf("Start Time: %lu\n", req.response->start_time);
         printf("Real Start Time: %lu\n", req.response->real_start_time);
         printf("Voluntary Context Switches: %ld\n", req.response->nvcsw);

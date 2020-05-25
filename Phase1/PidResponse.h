@@ -17,6 +17,7 @@ struct PidResponse
     unsigned long nivcsw;
     long state;
     int open_files;
+    pid_t parent_process;
     char open_file_paths[MAX_OPEN_FILES][PATH_MAX];
 };
 

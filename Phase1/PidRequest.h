@@ -6,6 +6,7 @@
 struct PidRequest
 {
     int pid;
+    int is_thread;
     struct PidResponse* response;
 };
 
