@@ -6,7 +6,7 @@
 #include <linux/limits.h>
 
 #define MAX_OPEN_FILES 1000
-#define MAX_PROCESS_NAME_LENGTH 1000
+#define MAX_PROCESS_NAME_LENGTH 4096
 
 struct PidResponse
 {

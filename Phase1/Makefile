@@ -15,4 +15,3 @@ unload:
 	-sudo rm -f $(device_file)
 pid:
 	gcc pid.c -o pidtest
-	./pidtest

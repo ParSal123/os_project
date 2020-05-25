@@ -25,18 +25,19 @@ int main(int argc, char* argv[])
         {"tid", 1, NULL, 't'},
         {NULL, 0, NULL, 0}
     };
-
+    int is_thread = 0;
+    int next_option;
     do
     {
         next_option = getopt_long_only(argc, argv, short_options, long_options, NULL);
         switch (next_option)
         {
-            case 'P':
+            case 'p':
                 period = atoi(optarg);
                 break;
             case 't':
                 is_thread = 1;
-            case 'p':
+            case 'P':
                 number = atoi(optarg);
                 break;
         }
@@ -58,14 +59,10 @@ int main(int argc, char* argv[])
         printf("Could not open device file! Device file path: %s\n", DEVICE_FILE);
         return file;
     }
-
-    printf("Please Enter Your Number.\n");
-    scanf("%d", &number);
     struct PidRequest req;
     
     req.pid = number;
     req.response = malloc(sizeof(struct PidResponse));
-    int is_thread = 1;
     while (1)
     {
         long result = ioctl(file, 0, &req);
@@ -90,7 +87,7 @@ int main(int argc, char* argv[])
                 printf("%d. %s\n", i + 1, req.response->open_file_paths[i]);
         }
 
-        usleep(1 * 1000000);
+        usleep(period * 1000000);
     }
     return 0;
 }
