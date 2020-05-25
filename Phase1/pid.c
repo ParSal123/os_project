@@ -4,17 +4,53 @@
 #include <unistd.h>
 #include <sys/ioctl.h>  
 #include <stdint.h>
+#include <getopt.h>
 
 #include "PidRequest.h"
 #include "PidResponse.h"
 
 const char* DEVICE_FILE = "/dev/piddriver";
 
-int main()
+int main(int argc, char* argv[])
 {
     int file;
     int i;
-    int number;
+    int number = -1;
+    const char* const short_options = "P:p:t:";
+    int period = -1;
+
+    const struct option long_options[] = {
+        {"period", 1, NULL, 'p'},
+        {"pid", 1, NULL, 'P'},
+        {"tid", 1, NULL, 't'},
+        {NULL, 0, NULL, 0}
+    };
+
+    do
+    {
+        next_option = getopt_long_only(argc, argv, short_options, long_options, NULL);
+        switch (next_option)
+        {
+            case 'P':
+                period = atoi(optarg);
+                break;
+            case 't':
+                is_thread = 1;
+            case 'p':
+                number = atoi(optarg);
+                break;
+        }
+    } while (next_option != -1);
+    if (number == -1)
+    {
+        printf("Please enter pid or tid\n");
+        return -1;
+    }
+    if (period == -1)
+    {
+        printf("Please enter valid period\n");
+        return -1;
+    }
 
     file = open(DEVICE_FILE, 0);
     if (file < 0)
