@@ -8,8 +8,11 @@
 #include <linux/fs.h>
 #include <linux/kernel.h>
 #include <linux/slab.h>
+#include <linux/fdtable.h>
+#include <linux/dcache.h>
 
 #include "PidRequest.h"
+#include "PidResponse.h"
 
 const char* DEVICE_NAME = "piddriver";
 static int device_file_major_number = 0;

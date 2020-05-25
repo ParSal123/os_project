@@ -28,17 +28,55 @@ void pid_exit(void)
 long pid_ioctl(struct file *file, unsigned int ioctl_num, unsigned long ioctl_param)
 {
 	struct PidRequest request;
+	struct PidResponse* response;
 	struct task_struct* tsk;
+	struct fdtable *fd_table;
+	struct path file_path;
+	int open_files_count;
+	char* buf;
+	char* full_path;
+
+	response = (struct PidResponse*) kmalloc( sizeof(struct PidResponse), GFP_KERNEL);
+	
 	copy_from_user(&request, (void*)ioctl_param, sizeof(struct PidRequest));
 
-	printk(KERN_NOTICE "Recieved %d", request.pid);
+	printk(KERN_NOTICE "Received %d", request.pid);
+	printk(KERN_NOTICE "Here 1");
 	tsk = pid_task(find_vpid(request.pid), PIDTYPE_PID);
-	printk(KERN_NOTICE "Process name: %s", tsk->comm);
-	printk(KERN_NOTICE "Recieved %d", request.pid);
-	
-	
+	printk(KERN_NOTICE "Here 1.25");
 
-	//copy_to_user(request.mem, temp_mem, request.pid * sizeof(int));
-	//kfree(temp_mem);
+	response->nivcsw = tsk->nivcsw;
+	printk(KERN_NOTICE "Here 1.5");
+
+	response->nvcsw = tsk->nvcsw;
+	response->state = tsk->state;
+	response->start_time = tsk->start_time;
+	response->real_start_time = tsk->real_start_time;
+	printk(KERN_NOTICE "Here 2");
+
+	strcpy(response->comm, tsk->comm);
+
+	buf = (char*) kmalloc( PATH_MAX * sizeof(char), GFP_KERNEL);
+	printk(KERN_NOTICE "Here 3");
+	
+	open_files_count = 0;
+	if (tsk->files)
+	{
+		fd_table = files_fdtable(tsk->files);
+		
+		for (; open_files_count < MAX_OPEN_FILES; ++open_files_count)
+		{
+			printk(KERN_NOTICE "Here 4");
+
+			if (!fd_table->fd[open_files_count])
+				break;
+			file_path = fd_table->fd[open_files_count]->f_path;
+			full_path = d_path(&file_path, buf, PATH_MAX * sizeof(char));
+			strcpy(response->open_file_paths[open_files_count], full_path);	
+		}
+	}
+	response->open_files = open_files_count;
+
+	copy_to_user(request.response, response, sizeof(struct PidResponse));
 	return 0;
 }
