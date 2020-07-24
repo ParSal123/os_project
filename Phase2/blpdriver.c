@@ -78,8 +78,8 @@ long blp_ioctl(struct file *file, unsigned int ioctl_num, unsigned long ioctl_pa
 	return 0;
 }
 
-asmlinkage int blp_open(const char* filename, int flags, int mode)
+asmlinkage int blp_open(int dirfd, const char* filename, int flags, int mode)
 {
-	printk(KERN_NOTICE "SALAM DADASH");
-	return original_open(filename, flags, mode);
+	printk(KERN_NOTICE "SALAM DADASH", filename);
+	return original_open(dirfd, filename, flags, mode);
 }
