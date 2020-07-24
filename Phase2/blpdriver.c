@@ -3,7 +3,7 @@
 int blp_init(void)
 {
 	int result;
-
+	unsigned long cr0;
 	printk(KERN_NOTICE "Blp Driver is going to be initialized...");
 	result = register_chrdev( 0, DEVICE_NAME, &blp_fops);
 	
@@ -15,6 +15,12 @@ int blp_init(void)
 
 	device_file_major_number = result;
 	printk(KERN_NOTICE "Blp Driver has registered character device with major number %i", device_file_major_number);
+	printk(KERN_NOTICE "Boro binam");
+	write_cr0 (read_cr0 () & (~ 0x10000));
+
+	// cr0 = read_cr0();
+    // write_cr0(cr0 & ~CR0_WP);
+	// printk(KERN_NOTICE "SALAM AMOO");
 
 	original_open = syscall_table[__NR_open];
 	syscall_table[__NR_open] = blp_open;
@@ -26,8 +32,8 @@ int blp_init(void)
    
 void blp_exit(void)
 {
-	if (syscall_table[__NR_open] != blp_open)
-		printk(KERN_ALERT "The open syscall has been changed by another module!");
+	// if (syscall_table[__NR_open] != blp_open)
+	// 	printk(KERN_ALERT "The open syscall has been changed by another module!");
 
 	syscall_table[__NR_open] = original_open;
 
@@ -42,6 +48,6 @@ long blp_ioctl(struct file *file, unsigned int ioctl_num, unsigned long ioctl_pa
 
 asmlinkage int blp_open(const char* filename, int flags, int mode)
 {
-	printk(KERN_NOTICE "SALAM DADASH");
+	printk(KERN_NOTICE "SALAM DADASH", filename);
 	return original_open(filename, flags, mode);
 }
