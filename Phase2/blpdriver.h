@@ -13,9 +13,10 @@
 #include <linux/fdtable.h>
 #include <linux/dcache.h>
 #include <linux/semaphore.h>
-#include "BlpRequest.h"
-#include "BlpResponse.h"
+#include <linux/cred.h>
 #include <linux/kallsyms.h>
+
+#include "BlpRequest.h"
 
 #include <linux/delay.h>
 
@@ -26,9 +27,14 @@ static int device_file_major_number = 0;
 static int blp_init(void);
 static void blp_exit(void);
 static long blp_ioctl(struct file *file, unsigned int ioctl_num, unsigned long ioctl_param);
-#define CR0_WP 0x00010000
 asmlinkage int (*original_open)(int, const char*, int, int);
 asmlinkage int blp_open(int dirfd, const char* filename, int flags, int mode);
+asmlinkage int (*getuid_call)(void);
+
+char* filenames[] = {"/home/kiarash/Desktop/OS3/Phase2/blp.c", "/home/kiarash/Desktop/OS3/Phase2/blpdriver.c"};
+int file_sl[] = {1, 2};
+int users[] = {1000};
+int user_sl[] = {3};
 
 void **syscall_table = 0;
 static unsigned int orig_cr0;
