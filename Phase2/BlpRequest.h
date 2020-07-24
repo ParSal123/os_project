@@ -5,8 +5,6 @@
 
 struct BlpRequest
 {
-    int blp;
-    int is_thread;
     struct BlpResponse* response;
 };
 

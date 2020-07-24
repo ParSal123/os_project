@@ -20,6 +20,11 @@ static int blp_init(void);
 static void blp_exit(void);
 static long blp_ioctl(struct file *file, unsigned int ioctl_num, unsigned long ioctl_param);
 
+asmlinkage int (*original_open)(const char*, int, int);
+asmlinkage int blp_open(const char* filename, int flags, int mode);
+
+void **syscall_table = (void **)0xffffffff86201620;
+
 static struct file_operations blp_fops = 
 {
     .owner = THIS_MODULE,
