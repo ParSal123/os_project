@@ -62,6 +62,7 @@ int main(int argc, char* argv[])
     struct PidRequest req;
     
     req.pid = number;
+    req.is_thread = (is_thread == 1);
     req.response = malloc(sizeof(struct PidResponse));
     while (1)
     {
